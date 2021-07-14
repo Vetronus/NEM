@@ -7,12 +7,14 @@ var task = require('../plugins/Task');
 // User Schema
 var UserSchema = new Schema
 ({
-    name: {type: String, required: true},
-    phone: {type: String, required: true},
-    pass: {type: String, required: true},
+    name: {type: String, required: true, index: true},
+    phone: {type: String, required: true, index: true},
+    email: {type: String},
+    pass: {type: String, required: true, select: false},
     stamp: {type: Date, default: Date.now},
 });
 
+UserSchema.index({name: 'text', phone: 'text'});
 
 // hash the password before saving a new user
 UserSchema.pre('save', async function(next){

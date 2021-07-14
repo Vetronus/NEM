@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 async function verifyLogin(model, login){
     if(!login.pass) throw new Error("#400 Password is required.");
     
-    const[e, account] = await task(model.findOne({phone: login.phone}));
+    const[e, account] = await task(model.findOne({phone: login.phone}).select('+pass'));
     if(e && !e.nf) throw new Error(e);
     if(e && e.nf) throw new Error("#404 Account not found.");
 

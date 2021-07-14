@@ -6,7 +6,7 @@ var handleRes = function(req, res, next){
     if(req.rd) newResData.obj = req.rd;
     if(req.log) log(req.log);
     
-    if(!req.rd){
+    if(req.rd === undefined || req.rd === null){
         console.log("==========");
         console.log("| #ERROR | 404 not found.");
         console.log("==========");
