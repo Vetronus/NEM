@@ -1,0 +1,23 @@
+{
+    "name": "NEM Stack",
+    "key": "nem_key",
+    "id": "nem",
+    "port": 5000,
+    "api": "api.example.com",
+    "shared_hosting": false,
+
+    "rzp_id": "rzp_live_key",
+    "rzpt_id": "rzp_test_key",
+    "rzp_sec": "SECRET",
+    "rzpt_sec": "SECRET",
+
+    "p_db": "Production_Database_URI",
+    "d_db": "DEBUG_DATABASE_URI",
+
+    "s3_bucket": "mediaobject",
+    "s3_id": "S3_ID",
+    "s3_key": "S3_KEY",
+
+    "letsencrypt_path": "/etc/letsencrypt/live/",
+    "tz": "Asia/Kolkata"
+}
