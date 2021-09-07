@@ -1,40 +1,36 @@
 'use strict'
-const Plan = require(__dirname + "/../models/Plan");
+const Org = require(__dirname + "/../models/Org");
 const Payment = require(__dirname + "/../models/Payment");
 const task = require(__dirname + "/../plugins/Task");
 const Razorpay = require('razorpay')
 const crypto = require("crypto");
-// TODO: work in progress
-
-var transfers = [{
-    account: "acc_HX9brO77EcdEWl",
-    currency: 'INR',
-    amount: 5*100,
-}];
 
 
 // creates order for razorpay
-async function createPayment(amount, user_id){
+async function createPayment(order){
 
     let rzp_options = {
-        key_id: global.rzp_id,
-        key_secret: global.rzp_sec
+        key_id: global.partner_tid,
+        key_secret: global.partner_tsec
     }
     let rzp = new Razorpay(rzp_options);
+    const[e, org] = await task(Org.findById(order.org));
+    if(e) throw e;
+    let acc_id = org.rzp_acc;
 
     // create order object from the plan id in razorpay db
-    transfers[0].amount = 5*100;
-    if(amount>60) transfers[0].amount = ((amount/100)*7.5)*100;
-
-    let recNum = user_id + '#' + (new Date().valueOf()).toString();
-    let newPayment = {currency: 'INR', amount: (amount*100), receipt: recNum, transfers: transfers};
+    let amount = order.amount - order.payment;
+    let newPayment = {account_id: acc_id, amount: (amount*100), receipt: order._id.toString(), currency: 'INR'};
     const[err, rzp_payment] = await task(rzp.orders.create(newPayment))
     if(err) throw err;
     
     // create payment object here in the backend
-    newPayment.plan = 'custom';
-    newPayment.id = rzp_payment.id;
-    newPayment.user = user_id;
+    newPayment.authorizer = rzp_payment.id;
+    newPayment.type = 'online';
+    newPayment.user = order.user;
+    newPayment.patient = order.patient;
+    newPayment.order = order._id.toString();
+    newPayment.org = order.org;
     const[er, payment] = await task(Payment.create(newPayment))
     if(er) throw er;
     return payment;
@@ -42,9 +38,8 @@ async function createPayment(amount, user_id){
 
 // verifies order for razorpay
 async function verifyPayment(paymentData){
-
     // if something is missing in payment data
-    if(!paymentData.razorpay_order_id || !paymentData.razorpay_payment_id || !paymentData.razorpay_signature)
+    if(!paymentData.order_id || !paymentData.razorpay_payment_id || !paymentData.razorpay_signature)
     throw new Error("Please send complete payment data");
     
     // then check for the key with sha256 bit algorithm
