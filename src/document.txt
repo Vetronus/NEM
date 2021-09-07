@@ -4,3 +4,34 @@ ERROR CODES & THEIR MEANINGS
 // 402 payment required
 // 403 forbidden
 // 404 not found
+
+=> To generate new ssl certificate
+https://flaviocopes.com/express-letsencrypt-ssl/
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot
+certbot certonly --manual
+
+=> To renew the certificate manually
+certbot renew --standalone
+
+=> To renew using certbot
+30 9 * * * certbot renew --standalone --pre-hook "pm2 stop main" --post-hook "pm2 start main"
+env EDITOR=pico crontab -e
+crontab -l
+
+=> To generate ssh key for Github
+cd ~/.ssh
+ssh-keygen -t rsa -C "14sarthi@gmail.com"
+
+=> If the key already exists
+mkdir key_backup
+cd id_rsa* key backup
+rm id_rsa*
+
+=> then copy the key and paste it to the Github
+nano id_rsa.pub
+
+=> Do this if the ssh key is not working
+eval `ssh-agent -s`
+ssh-add
