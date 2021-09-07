@@ -10,6 +10,10 @@
     "rzpt_id": "rzp_test_key",
     "rzp_sec": "SECRET",
     "rzpt_sec": "SECRET",
+    "partner_tid": "rzp_partner_test_id",
+    "partner_tsec": "rzp_partner_test_secret",
+    "partner_id": "rzp_partner_id",
+    "partner_sec": "rzp_partner_secret",
 
     "p_db": "Production_Database_URI",
     "d_db": "DEBUG_DATABASE_URI",

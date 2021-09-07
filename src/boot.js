@@ -29,12 +29,7 @@ function loadKeys() {
 function connectDatabse() {
     console.log('DB Connecting...')
     mongoose.Promise = Promise;
-    mongoose.set("useFindAndModify", false);
-    mongoose.connect(global.URI, {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true
-    });
+    mongoose.connect(global.uri);
     var db = mongoose.connection;
     db.on("error", (err) => console.error("DB Connection Error: ", err));
     db.once("open", () => {

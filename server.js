@@ -31,8 +31,8 @@ const auth = require("./routes/auth");
 const user = require("./routes/user");
 
 // route the incoming requests
-app.use('/auth', auth.router);
-app.use('/user', user);
+app.use(p+'/auth', auth.router);
+app.use(p+'/user', user);
 
 
 
@@ -51,3 +51,5 @@ if(global.ssl) https = require("https").createServer({
 else http = require("http").createServer(app);
 if(global.ssl) https.listen(443, () => console.log(global.keys.name + " | HTTPS:443"));
 else http.listen(port, () => console.log(global.keys.name + " | HTTP:"+port));
+if(global.debug)console.log('URI => http://localhost:' + port + p);
+else console.log('URI => https://' + global.keys.api + p);
