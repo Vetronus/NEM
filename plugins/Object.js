@@ -1,4 +1,4 @@
-const task = require(__dirname + "/../plugins/Task");
+const task = require("../plugins/Task");
 const AWS = require('aws-sdk');
 const spacesEndpoint = new AWS.Endpoint('sgp1.digitaloceanspaces.com');
 const s3 = new AWS.S3({
@@ -9,19 +9,18 @@ const s3 = new AWS.S3({
 
 const bucketName = global.keys.s3_bucket;
 const uploadExpiry = 60 * 60 * 3;
-const dir = global.id;
+const dir = global.keys.id;
 
-// TODO: add option for public/private header
-function getUploadURL(fileName, contentType){
+
+function getUploadURL(fileName, contentType, s3authHeader){
     fileName = dir + '/' + fileName;
     const url = s3.getSignedUrl('putObject', {
         Bucket: bucketName,
         Key: fileName,
         ContentType: contentType,
-        ACL: 'public-read',
+        ACL: s3authHeader,
         Expires: uploadExpiry
     });
-    console.log(url);
     return url;
 }
 
@@ -32,13 +31,12 @@ function getDownloadURL(fileName){
         Key: fileName,
         Expires: uploadExpiry
     });
-    console.log(url);
     return url;
 }
 
 async function deleteFile(filename){
-    let fileName = dir + '/' + fileName;
-    let params = {Bucket: bucketName, Key: fileName};
+    // let fileName = dir + '/' + fileName;
+    let params = {Bucket: bucketName, Key: filename};
     const[er, res] = await task(s3.deleteObject(params).promise());
     if(er) throw er;
     else return res;

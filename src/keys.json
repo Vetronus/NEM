@@ -2,7 +2,7 @@
     "name": "NEM Stack",
     "key": "nem_key",
     "id": "nem",
-    "port": 5000,
+    "port": 6000,
     "api": "api.example.com",
     "shared_hosting": false,
 
@@ -16,7 +16,7 @@
     "partner_sec": "rzp_partner_secret",
 
     "p_db": "Production_Database_URI",
-    "d_db": "DEBUG_DATABASE_URI",
+    "d_db": "Debug_Database_URI",
 
     "s3_bucket": "mediaobject",
     "s3_id": "S3_ID",

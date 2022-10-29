@@ -1,3 +1,4 @@
+const fs = require("fs");
 let keys = require('./keys.json');
 const mongoose = require("mongoose");
 let task = require('../plugins/Task');
@@ -5,7 +6,7 @@ let task = require('../plugins/Task');
 
 function loadKeys() {
     console.log('Loading...');
-    process.env.TZ = statics.tz;
+    process.env.TZ = keys.tz;
     global.keys = keys;
     global.debug = true;
     global.ssl = false;
@@ -43,7 +44,7 @@ async function tasks(){
     console.log('Ready.');
 }
 
-async function start(){
+function start(){
     loadKeys();
     connectDatabse();
 }

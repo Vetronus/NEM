@@ -1,9 +1,9 @@
 const fs = require("fs");
+const cors = require("cors");
 const morgan = require("morgan");
-const dot = require("./plugins/Dot");
 const Boot = require("./src/boot");
+const Encoder = require("./plugins/Encoder");
 const Auth = require("./plugins/Auth");
-
 
 // Setup Express
 const express = require("express");
@@ -13,8 +13,9 @@ app.use(cors());
 
 // setting global environment and var
 Boot.start();
-let port = process.env.PORT || global.port;
-let p =  global.keys.shared_hosting ?  "" : ('/'+port);
+let port = process.env.PORT || global.keys.port;
+if(!global.debug) port = 80;
+let p =  global.keys.shared_hosting ?  ('/'+port): "";
 
 
 // Decode incoming requests
@@ -31,14 +32,14 @@ const auth = require("./routes/auth");
 const user = require("./routes/user");
 
 // route the incoming requests
-app.use(p+'/auth', auth.router);
+app.use(p+'/auth', auth);
 app.use(p+'/user', user);
 
 
 
 // Encode outgoing response
-app.use(dot.handleRes);
-app.use(dot.handleError);
+app.use(Encoder.manageResponse);
+app.use(Encoder.manageError);
 
 
 // Initialize the server
@@ -51,5 +52,5 @@ if(global.ssl) https = require("https").createServer({
 else http = require("http").createServer(app);
 if(global.ssl) https.listen(443, () => console.log(global.keys.name + " | HTTPS:443"));
 else http.listen(port, () => console.log(global.keys.name + " | HTTP:"+port));
-if(global.debug)console.log('URI => http://localhost:' + port + p);
+if(global.debug)console.log('URI => http://localhost:'+ port + p);
 else console.log('URI => https://' + global.keys.api + p);
