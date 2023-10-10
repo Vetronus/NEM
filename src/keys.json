@@ -16,7 +16,7 @@
     "partner_sec": "rzp_partner_secret",
 
     "p_db": "Production_Database_URI",
-    "d_db": "Debug_Database_URI",
+    "d_db": "mongodb+srv://debugger:debugger4daWIN@cluster0.ipeli.mongodb.net/nem?authSource=admin",
 
     "s3_bucket": "mediaobject",
     "s3_id": "S3_ID",

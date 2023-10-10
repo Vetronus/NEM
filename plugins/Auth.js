@@ -1,7 +1,7 @@
 'use strict'
 const task = require("../plugins/Task");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 async function verifyLogin(model, phone, pass){
