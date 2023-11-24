@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var bcrypt = require('bcryptjs');
 var task = require('../plugins/Task');
-
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // User Schema
 var UserSchema = new Schema
@@ -27,5 +27,7 @@ UserSchema.pre('save', async function(next){
 
 
 // Expose the model to the server
+UserSchema.index({name: 'text'});
+UserSchema.plugin(AutoIncrement, {id: 'user_id', inc_field: 'id'});
 var Model = mongoose.model("User", UserSchema);
 module.exports = Model;
